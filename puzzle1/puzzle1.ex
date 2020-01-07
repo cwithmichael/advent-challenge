@@ -1,5 +1,5 @@
 defmodule Puzzle1 do
-    def calculateFuelSum do
+    def calculate_fuel_sum do
         {:ok, contents} = File.read("puzzle1_input.txt")
         masses = contents
             |> String.split
@@ -8,4 +8,4 @@ defmodule Puzzle1 do
     end
 end
 
-IO.puts Puzzle1.calculateFuelSum
+IO.puts Puzzle1.calculate_fuel_sum

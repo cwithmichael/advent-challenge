@@ -11,7 +11,7 @@ defmodule Puzzle2 do
         masses = contents
             |> String.split
             |> Enum.map(&String.to_integer/1)
-        Enum.sum(Enum.map(masses, fn(x) -> calculate_fuel_int(x, -x) end))
+        Enum.reduce(Enum.map(masses, fn(x) -> calculate_fuel_int(x, -x) end), fn(x, acc) -> x + acc end)
     end
 end
 

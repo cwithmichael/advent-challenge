@@ -1,5 +1,5 @@
 defmodule Puzzle1 do
-    def opcode_parser(work_array, idx, max) do
+    defp opcode_parser(work_array, idx, max) do
         x = elem(work_array, idx)
         cond do
             x == 99 -> work_array
@@ -20,17 +20,13 @@ defmodule Puzzle1 do
         end
     end
 
-    def int_cpu(xs) do
-        opcode_parser(List.to_tuple(xs), 0, length(xs))
-    end
-
     def compute(filename) do
         {:ok, contents} = File.read(filename)
         ints = contents
             |> String.split(",")
             |> Enum.map(&String.trim_trailing/1)
             |> Enum.map(&String.to_integer/1)
-        int_cpu(ints)
+        opcode_parser(List.to_tuple(ints), 0, length(ints))
     end
 end
 

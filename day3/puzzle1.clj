@@ -135,4 +135,4 @@
                                                                            (nth (get (get (nth filtered-points i) 0) 1) 0)
                                                                            (nth (get (get (nth filtered-points i) 0) 1) 1)))))))))
 
-(println (apply min (find-closest (get-intersection-points (get-line-segments (get-lines (get-coords "demo")))))))
+(println (apply min (find-closest (get-intersection-points (get-line-segments (get-lines (get-coords "input")))))))

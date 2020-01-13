@@ -40,20 +40,18 @@ func max(a, b int) int {
 func parseInputLine(lineCoords []string) []Point {
 	var line []Point
 	line = append(line, Point{0, 0})
-	count := 0
-	for _, v := range lineCoords {
+	for k, v := range lineCoords {
 		coord, _ := strconv.Atoi(v[1:])
 		switch direction := v[0]; direction {
 		case 'R':
-			line = append(line, Point{line[count].x + coord, line[count].y})
+			line = append(line, Point{line[k].x + coord, line[k].y})
 		case 'L':
-			line = append(line, Point{line[count].x - coord, line[count].y})
+			line = append(line, Point{line[k].x - coord, line[k].y})
 		case 'U':
-			line = append(line, Point{line[count].x, line[count].y + coord})
+			line = append(line, Point{line[k].x, line[k].y + coord})
 		case 'D':
-			line = append(line, Point{line[count].x, line[count].y - coord})
+			line = append(line, Point{line[k].x, line[k].y - coord})
 		}
-		count++
 	}
 
 	return line
@@ -138,7 +136,6 @@ func calculateDistances(line1 []Point, line2 []Point, i int, j int) int {
 	if result != nil {
 		res, err := calculateIntersectionPoint(result[0], result[1], result[2], result[3])
 		if err != nil {
-			fmt.Println("Whoops", err)
 			return 0
 		}
 		return getManhattanDistance(Point{0, 0}, res)

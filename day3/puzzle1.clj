@@ -7,7 +7,7 @@
   ; Find the manhattan distance between two points
   (let [[px py] p
         [qx qy] q
-        distance (+ (Math/abs (- qx px)) (Math/abs (- qy py)))]
+        distance (+ (Math/abs ^Integer  (- qx px)) (Math/abs ^Integer (- qy py)))]
     distance))
 
 (defn get-orientation [p q r]
@@ -68,41 +68,45 @@
       (and (= orientation-3 0) (on-segment? p2 p q2)) [pq pq2]
       (and (= orientation-4 0) (on-segment? p2 q q2)) [pq pq2]
       :else nil)))
-    
 
 (defn get-intersection-points [line-segments]
   ; Return a list of intersection points
-  (let [x (get line-segments 0) y  (get line-segments 1) cmp (compare (count x) (count y)) intersection-points []]
-    (cond 
+  (let [x (get line-segments 0)
+        y  (get line-segments 1)
+        cmp (compare (count x) (count y))
+        cnt-x (count x)
+        cnt-y (count y)
+        intersection-points []]
+    (cond
       (empty? x) intersection-points
-      (= cmp 0) (for [i (range (count x)) j (range (count x))] (conj intersection-points 
-                                                                     (intersect? 
-                                                                      (nth x i) 
-                                                                      (nth y j))))
-      (= cmp -1) (for [j (range (count y)) i (range (count x))] (conj intersection-points
-                                                                      (intersect?
-                                                                       (nth y i)
-                                                                       (nth x j))))
-      (= cmp 1) (for [i (range (count x)) j (range (count y))] (conj intersection-points 
-                                                                     (intersect? 
-                                                                      (nth x i) 
-                                                                      (nth y j)))))))
+      (= cmp 0) (for [i (range cnt-x) j (range cnt-x)] (conj intersection-points
+                                                             (intersect?
+                                                              (nth x i)
+                                                              (nth y j))))
+      (= cmp -1) (for [j (range cnt-y) i (range cnt-x)] (conj intersection-points
+                                                              (intersect?
+                                                               (nth y i)
+                                                               (nth x j))))
+      (= cmp 1) (for [i (range cnt-x) j (range cnt-y)] (conj intersection-points
+                                                             (intersect?
+                                                              (nth x i)
+                                                              (nth y j)))))))
 
 (defn get-points [source movement line]
   ; Get points for line
-  ;(println line)
+  (println (type movement))
   (if (empty? movement) (conj line source)
       (let [
-            [_ direction steps] (re-matches #"([RLUD])(\d+)" (first movement))
+            [_ direction ^Integer steps] (re-matches #"([RLUD])(\d+)" (nth movement 0))
             num-steps (Integer/parseInt steps)]
         (cond
-          (= direction "R") (get-points
+          (= direction "R") (recur
                              (assoc source 0 (+ (get source 0) num-steps)) (drop 1 movement) (conj line source))
-          (= direction "U") (get-points
+          (= direction "U") (recur
                              (assoc source 1 (+ (get source 1) num-steps)) (drop 1 movement) (conj line source))
-          (= direction "L") (get-points
+          (= direction "L") (recur
                              (assoc source 0 (- (get source 0) num-steps)) (drop 1 movement) (conj line source))
-          (= direction "D") (get-points
+          (= direction "D") (recur
                              (assoc source 1 (- (get source 1) num-steps)) (drop 1 movement) (conj line source))))))
 
 (defn get-line-segments [lines]
@@ -114,13 +118,13 @@
   ; Get lines based on coords provided in input
   (loop [i 0 lines []]
     (if (= i 2)
-      lines
+      (vec lines)
       (recur (inc i) (conj lines (get-points [0 0] (get coords i) []))))))
 
 (defn find-closest [intersection-points]
   ;Find closet intersection point to origin; We don't care about points that include the source (0, 0)
   ;(println intersection-points)
-  (let [filtered-points (remove (fn [x] (or (nil? (first x)) (= (nth (get-in x [0 1]) 0) [0 0]))) intersection-points)]
+  (let [filtered-points (remove (fn [x] (or (nil? (get x 0)) (= (nth (get-in x [0 1]) 0) [0 0]))) intersection-points)]
     ;(println filtered-points)
     (loop [i 0
            cnt (count filtered-points)

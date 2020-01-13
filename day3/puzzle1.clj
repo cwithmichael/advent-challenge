@@ -120,7 +120,7 @@
 (defn find-closest [intersection-points]
   ;Find closet intersection point to origin; We don't care about points that include the source (0, 0)
   ;(println intersection-points)
-  (let [filtered-points (remove (fn [x] (or (nil? (first x)) (= (nth (get (get x 0) 1) 0) [0 0]))) intersection-points)]
+  (let [filtered-points (remove (fn [x] (or (nil? (first x)) (= (nth (get-in x [0 1]) 0) [0 0]))) intersection-points)]
     ;(println filtered-points)
     (loop [i 0
            cnt (count filtered-points)
@@ -130,9 +130,9 @@
         (recur 
          (inc i) cnt 
          (conj distances 
-               (get-manhattan-distance [0 0] (calculate-intersection-point (nth (get (get (nth filtered-points i) 0) 0) 0)
-                                                                           (nth (get (get (nth filtered-points i) 0) 0) 1)
-                                                                           (nth (get (get (nth filtered-points i) 0) 1) 0)
-                                                                           (nth (get (get (nth filtered-points i) 0) 1) 1)))))))))
+               (get-manhattan-distance [0 0] (calculate-intersection-point (nth (get-in (nth filtered-points i) [0 0]) 0)
+                                                                                (nth (get-in (nth filtered-points i) [0 0]) 1)
+                                                                                (nth (get-in (nth filtered-points i) [0 1]) 0)
+                                                                                (nth (get-in (nth filtered-points i) [0 1]) 1)))))))))
 
 (println (apply min (find-closest (get-intersection-points (get-line-segments (get-lines (get-coords "input")))))))

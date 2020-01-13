@@ -37,7 +37,6 @@
 (defn calculate-intersection-point [p q r s]
   ; Calculate the intersection point
   ; http://www.ambrsoft.com/MathCalc/Line/TwoLinesIntersection/TwoLinesIntersection.htm
-  ;(println p q r s)
   (let [[x1 y1] p
         [x2 y2] q
         [x3 y3] r 
@@ -51,13 +50,11 @@
 
 (defn intersect? [pq pq2]
   ; Do these two lines intersect?
-  ;(println pq pq2)
-  (let [
-        [p q] pq
+  (let [[p q] pq
         [p2 q2] pq2
-        orientation-1 (get-orientation p q p2) 
-        orientation-2 (get-orientation p q q2) 
-        orientation-3 (get-orientation p2 q2 p) 
+        orientation-1 (get-orientation p q p2)
+        orientation-2 (get-orientation p q q2)
+        orientation-3 (get-orientation p2 q2 p)
         orientation-4 (get-orientation p2 q2 q)]
     (cond
       ; General case
@@ -73,28 +70,28 @@
   ; Return a list of intersection points
   (let [x (get line-segments 0)
         y  (get line-segments 1)
-        cmp (compare (count x) (count y))
         cnt-x (count x)
         cnt-y (count y)
+        cmp (compare cnt-x cnt-y)
         intersection-points []]
     (cond
       (empty? x) intersection-points
-      (= cmp 0) (for [i (range cnt-x) j (range cnt-x)] (conj intersection-points
-                                                             (intersect?
-                                                              (nth x i)
-                                                              (nth y j))))
-      (= cmp -1) (for [j (range cnt-y) i (range cnt-x)] (conj intersection-points
-                                                              (intersect?
-                                                               (nth y i)
-                                                               (nth x j))))
-      (= cmp 1) (for [i (range cnt-x) j (range cnt-y)] (conj intersection-points
-                                                             (intersect?
-                                                              (nth x i)
-                                                              (nth y j)))))))
+      (= cmp 0) (for [i (range (- cnt-x 2)) j (range (- cnt-x 2))] (conj intersection-points
+                                                                         (intersect?
+                                                                          (subvec x i (+ i 2))
+                                                                          (subvec y j (+ j 2)))))
+      (= cmp -1) (for [i (range (- cnt-y 2)) j (range (- cnt-x 2))] (conj intersection-points
+                                                                          (intersect?
+                                                                           (subvec x i (+ i 2))
+                                                                           (subvec y j (+ j 2)))))
+      (= cmp 1) (for [i (range (- cnt-x 2)) j (range (- cnt-y 2))] (conj intersection-points
+                                                                   (intersect?
+                                                                    (subvec x i (+ i 2))
+                                                                    (subvec y j (+ j 2))))))))
 
 (defn get-points [source movement line]
   ; Get points for line
-  (println (type movement))
+  ;(println (type movement))
   (if (empty? movement) (conj line source)
       (let [
             [_ direction ^Integer steps] (re-matches #"([RLUD])(\d+)" (nth movement 0))
@@ -109,11 +106,6 @@
           (= direction "D") (recur
                              (assoc source 1 (- (get source 1) num-steps)) (drop 1 movement) (conj line source))))))
 
-(defn get-line-segments [lines]
-  ; break up the lines into segments
-  ;(println lines)
-  (let [segments [(partition 2 1 (get lines 0)) (partition 2 1 (get lines 1))]] segments))
-
 (defn get-lines [coords]
   ; Get lines based on coords provided in input
   (loop [i 0 lines []]
@@ -123,20 +115,19 @@
 
 (defn find-closest [intersection-points]
   ;Find closet intersection point to origin; We don't care about points that include the source (0, 0)
-  ;(println intersection-points)
-  (let [filtered-points (remove (fn [x] (or (nil? (get x 0)) (= (nth (get-in x [0 1]) 0) [0 0]))) intersection-points)]
-    ;(println filtered-points)
-    (loop [i 0
-           cnt (count filtered-points)
+  (let [filtered-points (remove (fn [x] (or (nil? (get x 0)) (= (get (get-in x [0 1]) 0) [0 0]))) intersection-points)]
+    (loop [points (first filtered-points)
+           filtered-points filtered-points
            distances []]
-      (if (= i cnt) 
+      (if (empty? filtered-points)
         distances
-        (recur 
-         (inc i) cnt 
-         (conj distances 
-               (get-manhattan-distance [0 0] (calculate-intersection-point (nth (get-in (nth filtered-points i) [0 0]) 0)
-                                                                                (nth (get-in (nth filtered-points i) [0 0]) 1)
-                                                                                (nth (get-in (nth filtered-points i) [0 1]) 0)
-                                                                                (nth (get-in (nth filtered-points i) [0 1]) 1)))))))))
+        (recur
+         (first (drop 1 filtered-points))
+         (drop 1 filtered-points)
+         (conj distances
+               (get-manhattan-distance [0 0] (calculate-intersection-point (nth (get-in points [0 0]) 0)
+                                                                           (nth (get-in points [0 0]) 1)
+                                                                           (nth (get-in points [0 1]) 0)
+                                                                           (nth (get-in points [0 1]) 1)))))))))
 
-(println (apply min (find-closest (get-intersection-points (get-line-segments (get-lines (get-coords "input")))))))
+(println (apply min (find-closest (get-intersection-points (get-lines (get-coords "demo"))))))

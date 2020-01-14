@@ -1,6 +1,8 @@
-package main
+package puzzle1
 
-import "testing"
+import (
+	"testing"
+)
 
 func TestHasPairOfEqualAdjacentDigits(t *testing.T) {
 	res := hasPairOfEqualAdjacentDigits("111111")
@@ -20,49 +22,49 @@ func TestHasPairOfEqualAdjacentDigits(t *testing.T) {
 }
 
 func TestIsAllDigitsIncreasingOrSame(t *testing.T) {
-	res := isAllDigitsIncreasingOrSame("111111")
+	res := IsAllDigitsIncreasingOrSame("111111")
 	if res != true {
 		t.Errorf("Incorrect result, got: %t, want: %t.", res, true)
 	}
 
-	res = isAllDigitsIncreasingOrSame("223450")
+	res = IsAllDigitsIncreasingOrSame("223450")
 	if res == true {
 		t.Errorf("Incorrect result, got: %t, want: %t.", res, false)
 	}
 
-	res = isAllDigitsIncreasingOrSame("842599")
+	res = IsAllDigitsIncreasingOrSame("842599")
 	if res == true {
 		t.Errorf("Incorrect result, got: %t, want: %t.", res, false)
 	}
 
-	res = isAllDigitsIncreasingOrSame("776677")
+	res = IsAllDigitsIncreasingOrSame("776677")
 	if res == true {
 		t.Errorf("Incorrect result, got: %t, want: %t.", res, false)
 	}
 
-	res = isAllDigitsIncreasingOrSame("775599")
+	res = IsAllDigitsIncreasingOrSame("775599")
 	if res == true {
 		t.Errorf("Incorrect result, got: %t, want: %t.", res, false)
 	}
 
-	res = isAllDigitsIncreasingOrSame("121250")
+	res = IsAllDigitsIncreasingOrSame("121250")
 	if res == true {
 		t.Errorf("Incorrect result, got: %t, want: %t.", res, false)
 	}
 }
 
 func TestIsWithinRange(t *testing.T) {
-	res := isWithinRange("100")
+	res := IsWithinRange("100")
 	if res == true {
 		t.Errorf("Incorrect result, got: %t, want: %t.", res, false)
 	}
 
-	res = isWithinRange("199999393993")
+	res = IsWithinRange("199999393993")
 	if res == true {
 		t.Errorf("Incorrect result, got: %t, want: %t.", res, false)
 	}
 
-	res = isWithinRange("502397")
+	res = IsWithinRange("502397")
 	if res != true {
 		t.Errorf("Incorrect result, got: %t, want: %t.", res, true)
 	}

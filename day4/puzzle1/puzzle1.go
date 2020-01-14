@@ -1,7 +1,6 @@
-package main
+package puzzle1
 
 import (
-	"fmt"
 	"strconv"
 )
 
@@ -21,7 +20,7 @@ func hasPairOfEqualAdjacentDigits(password string) bool {
 	return false
 }
 
-func isAllDigitsIncreasingOrSame(password string) bool {
+func IsAllDigitsIncreasingOrSame(password string) bool {
 	for i := 0; i < len(password)-1; i++ {
 		if password[i+1] < password[i] {
 			return false
@@ -30,7 +29,7 @@ func isAllDigitsIncreasingOrSame(password string) bool {
 	return true
 }
 
-func isWithinRange(password string) bool {
+func IsWithinRange(password string) bool {
 	numericPassword, _ := strconv.Atoi(password)
 	return numericPassword >= RangeStart && numericPassword <= RangeEnd
 }
@@ -38,15 +37,5 @@ func isWithinRange(password string) bool {
 //CheckPassword tests to see if a password meets certain criteria
 func CheckPassword(password string) bool {
 
-	return isWithinRange(password) && hasPairOfEqualAdjacentDigits(password) && isAllDigitsIncreasingOrSame(password)
-}
-
-func main() {
-	total := 0
-	for i := RangeStart; i < RangeEnd; i++ {
-		if CheckPassword(strconv.Itoa(i)) {
-			total++
-		}
-	}
-	fmt.Println(total)
+	return IsWithinRange(password) && hasPairOfEqualAdjacentDigits(password) && IsAllDigitsIncreasingOrSame(password)
 }

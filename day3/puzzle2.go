@@ -150,7 +150,7 @@ func calculateSteps(line1 []Point, line2 []Point, i int, j int) int {
 	return 0
 }
 
-// Find the Manhattan distance of the intersecting points from the source
+// Find the number of steps from the intersecting points to the source for each line
 func findSteps(lines [][]Point) []int {
 	line1 := lines[0]
 	line2 := lines[1]

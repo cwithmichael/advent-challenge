@@ -10,7 +10,6 @@ func hasSinglePairOfEqualAdjacentDigits(password string) bool {
 		idx := i
 		for idx < len(password)-1 && password[idx] == password[idx+1] {
 			count += 2
-			//fmt.Println(string(password[idx]), string(password[idx+1]))
 			idx++
 		}
 		if count == 2 {
@@ -27,8 +26,4 @@ func CheckPassword(password string) bool {
 	return puzzle1.IsWithinRange(password) &&
 		puzzle1.IsAllDigitsIncreasingOrSame(password) &&
 		hasSinglePairOfEqualAdjacentDigits(password)
-}
-
-func main() {
-
 }

@@ -28,7 +28,7 @@ func TestHasSinglePairOfEqualAdjacentDigits(t *testing.T) {
 func TestCheckPassword(t *testing.T) {
 	res := CheckPassword("111111")
 	if res == true {
-		t.Errorf("Incorrect result, got: %t, want: %t.", res, true)
+		t.Errorf("Incorrect result, got: %t, want: %t.", res, false)
 	}
 
 	res = CheckPassword("223450")

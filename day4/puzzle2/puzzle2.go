@@ -9,11 +9,10 @@ func hasSinglePairOfEqualAdjacentDigits(password string) bool {
 		count := 0
 		idx := i
 		for idx < len(password)-1 && password[idx] == password[idx+1] {
-			count++
+			count += 2
 			//fmt.Println(string(password[idx]), string(password[idx+1]))
 			idx++
 		}
-		count++
 		if count == 2 {
 			return true
 		}

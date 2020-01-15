@@ -3,11 +3,13 @@ package puzzle1
 import "fmt"
 
 const (
-	Done  = 99
-	Add   = 1
-	Mul   = 2
-	Store = 3
-	Put   = 4
+	PositonMode   = 0
+	ImmediateMode = 1
+	Add           = 1
+	Mul           = 2
+	Store         = 3
+	Put           = 4
+	Done          = 99
 )
 
 type ParameterInstruction struct {
@@ -28,15 +30,15 @@ func parseParameterInstruction(instruction int) ParameterInstruction {
 
 func executeParameter(pi ParameterInstruction, opcodes []int, i int, input int) int {
 	var x, y, steps int
-	if pi.param1 == 1 {
+	if pi.param1 == ImmediateMode {
 		x = opcodes[i+1]
-	} else if pi.param1 == 0 {
+	} else if pi.param1 == PositonMode {
 		x = opcodes[opcodes[i+1]]
 	}
 
-	if pi.param2 == 1 {
+	if pi.param2 == ImmediateMode {
 		y = opcodes[i+2]
-	} else if pi.param2 == 0 && pi.opcode != Put {
+	} else if pi.param2 == PositonMode && pi.opcode != Put {
 		y = opcodes[opcodes[i+2]]
 	}
 
@@ -65,7 +67,6 @@ func ParseOpcodes(opcodes []int, input int) []int {
 		}
 		pi := parseParameterInstruction(opcodes[i])
 		i += executeParameter(pi, opcodes, i, input)
-
 	}
 
 	return opcodes

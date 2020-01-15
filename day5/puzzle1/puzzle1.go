@@ -36,7 +36,7 @@ func executeParameter(pi ParameterInstruction, opcodes []int, i int, input int) 
 
 	if pi.param2 == 1 {
 		y = opcodes[i+2]
-	} else if pi.param2 == 0 && pi.opcode != 4 {
+	} else if pi.param2 == 0 && pi.opcode != Put {
 		y = opcodes[opcodes[i+2]]
 	}
 

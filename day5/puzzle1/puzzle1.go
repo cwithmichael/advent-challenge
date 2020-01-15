@@ -18,12 +18,10 @@ type ParameterInstruction struct {
 }
 
 func parseParameterInstruction(instruction int) ParameterInstruction {
-	var opcode, firstParamMode, secondParamMode, thirdParamMode int
-	//fmt.Println("Parsing: ", instruction)
-	opcode = instruction % 100
-	firstParamMode = instruction / 100 % 10
-	secondParamMode = instruction / 1000 % 10
-	thirdParamMode = instruction / 10000 % 10
+	opcode := instruction % 100
+	firstParamMode := instruction / 100 % 10
+	secondParamMode := instruction / 1000 % 10
+	thirdParamMode := instruction / 10000 % 10
 
 	return ParameterInstruction{opcode, firstParamMode, secondParamMode, thirdParamMode}
 }
